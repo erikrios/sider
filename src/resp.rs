@@ -47,6 +47,13 @@ fn binary_extract_line(buffer: &[u8], index: &mut usize) -> RESPResult<Vec<u8>> 
     Ok(output)
 }
 
+// Extracts bytes from the buffer until a '\r' is reached and converts them into a string
+pub fn binary_extract_line_as_string(buffer: &[u8], index: &mut usize) -> RESPResult<String> {
+    let line = binary_extract_line(buffer, index)?;
+
+    Ok(String::from_utf8(line)?)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -137,6 +144,17 @@ mod tests {
         let output = binary_extract_line(buffer, &mut index).unwrap();
 
         assert_eq!(output, "OK".as_bytes());
+        assert_eq!(index, 4);
+    }
+
+    #[test]
+    fn test_binary_extrat_line_as_string() {
+        let buffer = "OK\r\n".as_bytes();
+        let mut index = 0;
+
+        let output = binary_extract_line_as_string(buffer, &mut index).unwrap();
+
+        assert_eq!(output, String::from("OK"));
         assert_eq!(index, 4);
     }
 }
