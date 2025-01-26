@@ -30,3 +30,13 @@ pub type RESPResult<T> = Result<T, RESPError>;
 pub enum RESP {
     SimpleString(String),
 }
+
+impl fmt::Display for RESP {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let data = match self {
+            Self::SimpleString(data) => format!("+{}\r\n", data),
+        };
+
+        write!(f, "{}", data)
+    }
+}
