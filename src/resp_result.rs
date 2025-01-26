@@ -25,3 +25,8 @@ impl From<FromUtf8Error> for RESPError {
 }
 
 pub type RESPResult<T> = Result<T, RESPError>;
+
+#[derive(Debug, PartialEq)]
+pub enum RESP {
+    SimpleString(String),
+}
